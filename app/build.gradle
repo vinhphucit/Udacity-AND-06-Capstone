@@ -1,0 +1,85 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.firebase.firebase-crash'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "com.phuctv.englishpodcast"
+        minSdkVersion 15
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        def STRING = "String"
+        buildConfigField STRING, "ROOT_URL", "\"https://avid-heading-737.appspot.com/_ah/api/bbc_english/v1/category/songsfull/\""
+        buildConfigField STRING, "EXTERNAL_DOWNLOAD_FOLDER", "\"EnglishPodcastUdacity\""
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    flavorDimensions "free", "paid"
+    productFlavors {
+        free {
+            dimension "free"
+        }
+        paid {
+            dimension "paid"
+        }
+    }
+    signingConfigs {
+
+        release {
+            keyAlias 'keystore'
+            keyPassword 'password'
+            storeFile file("../release.keystore")
+            storePassword 'password'
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.github.bumptech.glide:glide:3.8.0'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:cardview-v7:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation 'com.jakewharton.timber:timber:4.6.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
+    implementation 'org.parceler:parceler-api:1.1.9'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.6'
+    implementation 'jp.wasabeef:blurry:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.google.firebase:firebase-core:11.6.0'
+    implementation 'com.google.firebase:firebase-crash:11.6.0'
+    annotationProcessor "org.parceler:parceler:1.1.9"
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
+    implementation 'com.google.android.gms:play-services-ads:11.6.0'
+    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
+
+}
+apply plugin: 'com.google.gms.google-services'

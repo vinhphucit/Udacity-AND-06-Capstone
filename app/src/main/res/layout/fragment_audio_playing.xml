@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/ivBlurBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@color/photo_placeholder" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@color/transblack" />
+
+    <RelativeLayout
+        android:id="@+id/mediaplayer_control"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/downloadLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+            <com.github.lzyzsd.circleprogress.CircleProgress
+                android:id="@+id/cpDownload"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="8dp"
+
+                app:circle_finished_color="@color/theme_accent"
+                app:circle_unfinished_color="@color/theme_accent" />
+
+            <ImageView
+                android:id="@+id/ivPlayPause"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="8dp"
+                android:tint="@color/theme_accent"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_play_arrow_black_24dp" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tvTimeCurrentPlaying"
+            android:layout_width="56dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/downloadLayout"
+            android:text="@string/default_time_mediaplayer" />
+
+        <SeekBar
+            android:id="@+id/sbMedia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tvTime"
+            android:layout_toRightOf="@+id/tvTimeCurrentPlaying"
+            />
+
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="56dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="@string/default_time_mediaplayer" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/mediaplayer_control"
+        android:scrollbarStyle="outsideOverlay"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/favourite_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/fab_margin"
+        android:contentDescription="@string/action_share"
+        app:borderWidth="0dp"
+        app:elevation="6dp"
+        app:fabSize="normal"
+        app:layout_anchorGravity="right|end|bottom"
+        app:srcCompat="@android:drawable/btn_star_big_off" />
+
+    <include layout="@layout/view_progress" />
+
+
+</RelativeLayout>

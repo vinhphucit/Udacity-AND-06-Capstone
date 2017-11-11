@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="photo_placeholder">#ccc</color>
+
+    <color name="theme_primary">#FF9800</color>
+    <color name="theme_primary_dark">#F57C00</color>
+    <color name="theme_accent">#26A69A</color>
+    <color name="ltgray">#ffe0e0e0</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="bpTransparent">#00000000</color>
+    <color name="transblack">#D9000000</color>
+    <color name="dark_yellow_login">#ddac0a</color>
+    <color name="yellow_login">#ffc400</color>
+    <color name="yellow_login_background">#33ffc400</color>
+    <color name="background_rv">#fafbfc</color>
+</resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.phuctv.englishpodcast">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.phuctv.englishpodcast.TERMS_READ" />
+    <application
+        android:name=".PodcastApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Bacon">
+        <activity
+            android:name=".ui.activities.SplashActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activities.MasterActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <provider
+            android:name=".data.local.contentProviders.FavouriteContentProvider"
+            android:authorities="com.phuctv.englishpodcast"
+            android:exported="false" />
+
+        <receiver android:name=".ui.widgets.IngredientWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/ingredient_app_widget_info" />
+        </receiver>
+        <service
+            android:name=".ui.widgets.ListWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            />
+    </application>
+
+</manifest>

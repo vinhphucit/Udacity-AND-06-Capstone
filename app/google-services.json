@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "232355618311",
+    "firebase_url": "https://englishpodcastudacity.firebaseio.com",
+    "project_id": "englishpodcastudacity",
+    "storage_bucket": "englishpodcastudacity.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232355618311:android:a7a10c7cbcf9d738",
+        "android_client_info": {
+          "package_name": "com.phuctv.englishpodcast"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "232355618311-hi22i1si3fsunm4vvs9rrjnetq3okrnf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.phuctv.englishpodcast",
+            "certificate_hash": "5ce526483be3b725691b2e8826878051dbaaabf7"
+          }
+        },
+        {
+          "client_id": "232355618311-db1bs1dt8tsma70puv10uf5seo1bjqvb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKMiqoU7GN-hpsDSHcYrAacQItlpN_W1I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "232355618311-db1bs1dt8tsma70puv10uf5seo1bjqvb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
