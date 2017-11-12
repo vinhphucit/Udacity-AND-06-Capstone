@@ -1,13 +1,14 @@
 package com.phuctv.englishpodcast.domain.models;
 
+import android.os.Parcelable;
+
 import org.parceler.Parcel;
 
 /**
  * Created by phuctran on 11/8/17.
  */
 
-@Parcel
-public class PodcastModel {
+public class PodcastModel implements Parcelable {
     String name;
     String url;
     String audio_link;
@@ -84,4 +85,43 @@ public class PodcastModel {
     public void setDesc(String desc) {
         this.desc = desc;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(android.os.Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeString(this.url);
+        dest.writeString(this.audio_link);
+        dest.writeString(this.lyric_links);
+        dest.writeString(this.image_link);
+        dest.writeString(this.time);
+        dest.writeString(this.desc);
+    }
+
+    protected PodcastModel(android.os.Parcel in) {
+        this.name = in.readString();
+        this.url = in.readString();
+        this.audio_link = in.readString();
+        this.lyric_links = in.readString();
+        this.image_link = in.readString();
+        this.time = in.readString();
+        this.desc = in.readString();
+    }
+
+    public static final Parcelable.Creator<PodcastModel> CREATOR = new Parcelable.Creator<PodcastModel>() {
+        @Override
+        public PodcastModel createFromParcel(android.os.Parcel source) {
+            return new PodcastModel(source);
+        }
+
+        @Override
+        public PodcastModel[] newArray(int size) {
+            return new PodcastModel[size];
+        }
+    };
 }

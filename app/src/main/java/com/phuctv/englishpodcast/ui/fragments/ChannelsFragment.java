@@ -1,5 +1,6 @@
 package com.phuctv.englishpodcast.ui.fragments;
 
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -48,7 +49,7 @@ public class ChannelsFragment extends BaseMasterFragment implements ChannelsCont
     }
 
     @Override
-    protected void updateFollowingViewBinding() {
+    protected void updateFollowingViewBinding(Bundle savedInstanceState) {
         setupRecyclerView();
 //        setActionBarTitle(R.string.baking_time);
 

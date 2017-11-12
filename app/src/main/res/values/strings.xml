@@ -1,10 +1,15 @@
 <resources>
     <string name="app_name">EnglishPodcast</string>
-    <string name="transition_logo">TRANSITION_LOGO_SPLASH</string>
+    <string name="transition_logo" translatable="false">TRANSITION_LOGO_SPLASH</string>
     <string name="channel">Channel</string>
     <string name="action_share">Share</string>
     <string name="appwidget_text">Favourite Widget</string>
     <string name="interstitial_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
     <string name="default_time_mediaplayer">00:00</string>
     <string name="download_fail">Download file fail</string>
+    <string name="permission_alert">Write External Storage permission allows us to do store images. Please allow this permission in App Settings.</string>
+    <string name="error">Error</string>
+    <string name="error_message">There is an error in app.</string>
+    <string name="application_error">There are some errors in application</string>
+    <string name="podcast_favourites">PODCAST FAVOURITES</string>
 </resources>

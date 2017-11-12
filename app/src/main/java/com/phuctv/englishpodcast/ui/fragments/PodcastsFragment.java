@@ -1,10 +1,8 @@
 package com.phuctv.englishpodcast.ui.fragments;
 
 import android.os.Bundle;
-import android.os.Parcel;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -12,16 +10,14 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.phuctv.englishpodcast.R;
 import com.phuctv.englishpodcast.domain.models.ChannelModel;
 import com.phuctv.englishpodcast.domain.models.PodcastModel;
-import com.phuctv.englishpodcast.mvp.presenters.ChannelsPresenter;
 import com.phuctv.englishpodcast.mvp.presenters.PodcastsPresenter;
-import com.phuctv.englishpodcast.mvp.views.ChannelsContract;
 import com.phuctv.englishpodcast.mvp.views.PodcastsContract;
-import com.phuctv.englishpodcast.ui.adapters.ChannelAdapter;
 import com.phuctv.englishpodcast.ui.adapters.PodcastAdapter;
 import com.phuctv.englishpodcast.utils.Injection;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -32,14 +28,14 @@ import butterknife.BindView;
 
 public class PodcastsFragment extends BaseMasterFragment implements PodcastsContract.View, PodcastAdapter.ListItemClickListener {
     private static final String TAG = PodcastsFragment.class.getSimpleName();
-
+    private static final String ON_SAVE_INSTANCE_STATE_MOVIES = "ON_SAVE_INSTANCE_STATE_MOVIES";
     public static final String ARGS_CHANNEL = "ARGS_CHANNEL";
     @BindView(R.id.recycler_view)
     RecyclerView mRvRecipes;
     private PodcastsContract.Presenter mPresenter;
     private ChannelModel mChannelModel;
     private PodcastAdapter mMovieAdapter;
-    private List<PodcastModel> mRecipes;
+    private ArrayList<PodcastModel> mRecipes;
 
     public PodcastsFragment() {
         this.mPresenter = new PodcastsPresenter(this, Injection.provideGetPodcastsUseCase());
@@ -89,7 +85,19 @@ public class PodcastsFragment extends BaseMasterFragment implements PodcastsCont
     }
 
     @Override
-    protected void updateFollowingViewBinding() {
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mRecipes != null)
+            outState.putParcelableArrayList(ON_SAVE_INSTANCE_STATE_MOVIES, mRecipes);
+    }
+
+    @Override
+    protected void updateFollowingViewBinding(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(ON_SAVE_INSTANCE_STATE_MOVIES)) {
+                mRecipes = savedInstanceState.getParcelableArrayList(ON_SAVE_INSTANCE_STATE_MOVIES);
+            }
+        }
         if (mRecipes == null)
             mPresenter.doGetPodcasts(mChannelModel.getPodcastsUrl());
         else
@@ -104,7 +112,7 @@ public class PodcastsFragment extends BaseMasterFragment implements PodcastsCont
     @Override
     public void renderPodcasts(List<PodcastModel> podcasts) {
         setupRecyclerView();
-        this.mRecipes = podcasts;
+        this.mRecipes = (ArrayList<PodcastModel>) podcasts;
         mMovieAdapter = new PodcastAdapter(getContext(), mRecipes,
                 this);
         mRvRecipes.setAdapter(mMovieAdapter);

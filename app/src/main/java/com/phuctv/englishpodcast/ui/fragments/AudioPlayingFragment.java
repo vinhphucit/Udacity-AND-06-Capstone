@@ -145,7 +145,7 @@ public class AudioPlayingFragment extends BaseMasterFragment implements AudioPla
     }
 
     @Override
-    protected void updateFollowingViewBinding() {
+    protected void updateFollowingViewBinding(Bundle savedInstanceState) {
         mPresenter.doGetTranscript(mPodcastModel.getLyric_links());
         sbMedia.setEnabled(false);
         cpDownload.setMax(100);
@@ -184,7 +184,7 @@ public class AudioPlayingFragment extends BaseMasterFragment implements AudioPla
     private void requestPermission() {
 
         if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            Toast.makeText(getContext(), "Write External Storage permission allows us to do store images. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.permission_alert, Toast.LENGTH_LONG).show();
         } else {
             ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
         }

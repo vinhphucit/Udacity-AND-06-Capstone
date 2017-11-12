@@ -47,7 +47,7 @@ public abstract class BaseFragment extends Fragment {
 
         final View fragmentView = inflater.inflate(getLayoutResource(), container, false);
         unbinder = ButterKnife.bind(this, fragmentView);
-        updateFollowingViewBinding();
+        updateFollowingViewBinding(savedInstanceState);
         return fragmentView;
     }
 
@@ -71,8 +71,8 @@ public abstract class BaseFragment extends Fragment {
         mFirebaseAnalytics.setCurrentScreen(getActivity(), getSubclassName(), getSubclassName());
         Log.d(getSubclassName(), (new StringBuilder()).append("onCreate:").append(getClass().getName()).toString());
         errorDialog = new AlertDialog.Builder(getContext())
-                .setTitle("Error")
-                .setMessage("There is an error in app.")
+                .setTitle(R.string.error)
+                .setMessage(R.string.error_message)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // continue with delete
@@ -81,29 +81,6 @@ public abstract class BaseFragment extends Fragment {
                 .setIcon(android.R.drawable.ic_dialog_alert);
     }
 
-    protected void showAlertMessage(String content) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-
-        // set title
-        alertDialogBuilder.setTitle("Alert");
-
-        // set dialog message
-        alertDialogBuilder
-                .setMessage(content)
-                .setCancelable(true)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
-    }
 
     public void showLoading() {
         if (rl_progress != null)
@@ -133,7 +110,7 @@ public abstract class BaseFragment extends Fragment {
 
     public void showError(String message) {
         if (TextUtils.isEmpty(message))
-            message = "There are some errors in application";
+            message = getString(R.string.application_error);
         errorDialog.setMessage(message);
         errorDialog.show();
     }
@@ -156,7 +133,7 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract int getLayoutResource();
 
-    protected abstract void updateFollowingViewBinding();
+    protected abstract void updateFollowingViewBinding(Bundle savedInstanceState);
 
     protected ActionBar getActionBar() {
         Activity localActivity = getActivity();

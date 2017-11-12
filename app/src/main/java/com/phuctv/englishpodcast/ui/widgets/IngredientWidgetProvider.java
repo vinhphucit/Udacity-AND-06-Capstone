@@ -40,7 +40,7 @@ public class IngredientWidgetProvider extends AppWidgetProvider {
                             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
                             intent.putExtra(ListWidgetService.KEY_FAVOURITES, new Gson().toJson(recipe));
                             views.setRemoteAdapter(R.id.appwidget_list, intent);
-                            views.setTextViewText(R.id.appwidget_text, "PODCAST FAVOURITES");
+                            views.setTextViewText(R.id.appwidget_text, context.getString(R.string.podcast_favourites));
                             appWidgetManager.updateAppWidget(appWidgetId, views);
                             appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.appwidget_list);
 

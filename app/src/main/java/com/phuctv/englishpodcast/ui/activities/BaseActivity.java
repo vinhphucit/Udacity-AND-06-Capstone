@@ -24,6 +24,7 @@ import timber.log.Timber;
 
 public abstract class BaseActivity extends AppCompatActivity implements BaseFragment.BaseFragmentResponder {
     private static final String TAG = BaseActivity.class.getSimpleName();
+    protected String mTopFragment = null;
     protected InterstitialAd mInterstitialAd;
     AdRequest ar = new AdRequest
             .Builder()
@@ -80,6 +81,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
         Log.w(TAG, "showFragment - DEFAULT implementation called in BaseActivity");
         FragmentTransaction fragmenttransaction = getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
         fragmenttransaction.replace(R.id.fragmentContainer, newFragment, fragmentTag);
+        mTopFragment = fragmentTag;
         fragmenttransaction.addToBackStack(fragmentTag);
         fragmenttransaction.addSharedElement(sharedView, sharedElementName);
         fragmenttransaction.commit();
@@ -91,6 +93,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
         Log.w(TAG, "showFragment - DEFAULT implementation called in BaseActivity");
         FragmentTransaction fragmenttransaction = getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
         fragmenttransaction.replace(R.id.fragmentContainer, fragment, fragmentTag);
+        mTopFragment = fragmentTag;
         fragmenttransaction.addToBackStack(fragmentTag);
         fragmenttransaction.commit();
     }
