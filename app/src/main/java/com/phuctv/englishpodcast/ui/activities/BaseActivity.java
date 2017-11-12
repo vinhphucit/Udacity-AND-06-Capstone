@@ -77,8 +77,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
             newFragment.setSharedElementEnterTransition(TransitionInflater.from(this).inflateTransition(R.transition.default_transition));
             newFragment.setEnterTransition(TransitionInflater.from(this).inflateTransition(android.R.transition.no_transition));
         }
-
-        Log.w(TAG, "showFragment - DEFAULT implementation called in BaseActivity");
+        Timber.w("showFragment - DEFAULT implementation called in BaseActivity");
         FragmentTransaction fragmenttransaction = getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
         fragmenttransaction.replace(R.id.fragmentContainer, newFragment, fragmentTag);
         mTopFragment = fragmentTag;
@@ -90,7 +89,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
 
     public void showFragment(BaseFragment fragment, String fragmentTag) {
 
-        Log.w(TAG, "showFragment - DEFAULT implementation called in BaseActivity");
+        Timber.w("showFragment - DEFAULT implementation called in BaseActivity");
         FragmentTransaction fragmenttransaction = getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left, R.anim.enter_from_left, R.anim.exit_to_right);
         fragmenttransaction.replace(R.id.fragmentContainer, fragment, fragmentTag);
         mTopFragment = fragmentTag;
@@ -102,7 +101,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
     public void onBackPressed() {
         super.onBackPressed();
         int iBackStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
-        Log.d(TAG, (new StringBuilder()).append("onBackPressed - backStackEntryCount is: ").append(iBackStackEntryCount).toString());
+        Timber.d((new StringBuilder()).append("onBackPressed - backStackEntryCount is: ").append(iBackStackEntryCount).toString());
         if (iBackStackEntryCount <= 0) finish();
 
     }
@@ -125,7 +124,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
 
     public void setActionBarTitle(CharSequence charsequence) {
         if (charsequence == null) {
-            Log.w(TAG, "setActionBarTitle - title is null, so defaulting to full_app_name.");
+            Timber.w("setActionBarTitle - title is null, so defaulting to full_app_name.");
             charsequence = getString(R.string.app_name);
         }
         getSupportActionBar().setTitle(charsequence);
@@ -137,7 +136,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
 
     public void setActionBarTitle(String actionBarTitle) {
         if (actionBarTitle == null) {
-            Log.w(TAG, "setActionBarTitle - title is null, so defaulting to full_app_name.");
+            Timber.w("setActionBarTitle - title is null, so defaulting to full_app_name.");
             actionBarTitle = getString(R.string.app_name);
         }
         getSupportActionBar().setTitle(actionBarTitle);

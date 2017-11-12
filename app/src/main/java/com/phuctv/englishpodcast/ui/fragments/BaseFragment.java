@@ -23,6 +23,7 @@ import com.phuctv.englishpodcast.ui.activities.MasterActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import timber.log.Timber;
 
 /**
  * Created by phuctran on 9/18/17.
@@ -43,7 +44,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(getSubclassName(), (new StringBuilder()).append("onCreateView:").append(getClass().getName()).toString());
+        Timber.d((new StringBuilder()).append("onCreateView:").append(getClass().getName()).toString());
 
         final View fragmentView = inflater.inflate(getLayoutResource(), container, false);
         unbinder = ButterKnife.bind(this, fragmentView);
@@ -55,7 +56,7 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        Log.d(getSubclassName(), (new StringBuilder()).append("onDestroyView:").append(getClass().getName()).toString());
+        Timber.d((new StringBuilder()).append("onDestroyView:").append(getClass().getName()).toString());
 
     }
 
@@ -69,7 +70,7 @@ public abstract class BaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         mFirebaseAnalytics.setCurrentScreen(getActivity(), getSubclassName(), getSubclassName());
-        Log.d(getSubclassName(), (new StringBuilder()).append("onCreate:").append(getClass().getName()).toString());
+        Timber.d((new StringBuilder()).append("onCreate:").append(getClass().getName()).toString());
         errorDialog = new AlertDialog.Builder(getContext())
                 .setTitle(R.string.error)
                 .setMessage(R.string.error_message)

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:paddingLeft="@dimen/default_spacing"
     android:paddingRight="@dimen/default_spacing"
@@ -14,7 +15,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:paddingBottom="@dimen/small_spacing"
-        android:text="Graham Cracker crumbs"
+        tools:text="Graham Cracker crumbs"
         android:textColor="#000"
         android:textSize="18sp" />
 </LinearLayout>

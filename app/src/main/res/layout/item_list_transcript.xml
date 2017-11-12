@@ -11,7 +11,7 @@
         android:id="@+id/recipe_description"
         style="@style/AppTheme.Description.Inverse"
         android:layout_width="match_parent"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:padding="@dimen/unit2"

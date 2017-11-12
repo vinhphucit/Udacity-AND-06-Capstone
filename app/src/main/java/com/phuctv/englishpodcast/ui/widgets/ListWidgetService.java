@@ -15,6 +15,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 import static com.phuctv.englishpodcast.ui.widgets.IngredientWidgetProvider.mChoosedIngredients;
 
 
@@ -34,14 +36,14 @@ public class ListWidgetService extends RemoteViewsService {
         private List<FavouriteModel> ingredients = new ArrayList<>();
 
         public ListRemoteViewFactory(Context context, Intent intent) {
-            Log.d(TAG, "constructor");
+            Timber.d("constructor");
             this.mContext = context;
             this.intent = intent;
         }
 
         @Override
         public void onCreate() {
-            Log.d(TAG, "onCreate");
+            Timber.d("onCreate");
 
             Type type = new TypeToken<List<FavouriteModel>>() {
             }.getType();

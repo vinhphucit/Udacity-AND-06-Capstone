@@ -6,6 +6,8 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
+import timber.log.Timber;
+
 /**
  * Created by PhucTV on 5/27/15.
  */
@@ -29,7 +31,7 @@ public class Toaster {
 
     public static void showToast(Context context, int i, Duration duration, int gravity, int xOffset, int yOffset) {
         if (context == null) {
-            Log.e(TAG, "showToast - Context was null");
+            Timber.e("showToast - Context was null");
         } else {
             showToast(context, context.getResources().getString(i), duration, gravity, xOffset, yOffset);
         }
@@ -49,11 +51,11 @@ public class Toaster {
 
     public static void showToast(final Context context, final String text, final Duration duration, final int gravity, final int xOffset, final int yOffset) {
         if (context == null) {
-            Log.e(TAG, "showToast - Context was null");
+            Timber.e("showToast - Context was null");
             return;
         }
         if (text == null) {
-            Log.e(TAG, "showToast - text was null");
+            Timber.e("showToast - text was null");
         } else {
             mHandler.post(new Runnable() {
                 @Override

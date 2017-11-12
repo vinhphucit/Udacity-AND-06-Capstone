@@ -12,4 +12,11 @@
     <string name="error_message">There is an error in app.</string>
     <string name="application_error">There are some errors in application</string>
     <string name="podcast_favourites">PODCAST FAVOURITES</string>
+    <string name="background">Background Image</string>
+    <string name="blur_background">Make Background Blur</string>
+    <string name="media_control">Media Player Controller</string>
+    <string name="podcast">Podcast</string>
+    <string name="loading">Downloading Mp3 File</string>
+    <string name="media_seekbar">Media Player Seekbar</string>
+    <string name="action_favourite">Favourite</string>
 </resources>

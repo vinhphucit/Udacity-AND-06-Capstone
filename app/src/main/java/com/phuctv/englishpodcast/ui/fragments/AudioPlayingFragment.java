@@ -19,7 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -48,10 +48,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 import static android.R.drawable.btn_star_big_off;
 import static android.R.drawable.btn_star_big_on;
@@ -63,8 +65,14 @@ import static android.R.drawable.btn_star_big_on;
 public class AudioPlayingFragment extends BaseMasterFragment implements AudioPlayingContract.View, LoaderManager.LoaderCallbacks<String>, TranscriptAdapter.ListItemClickListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener, SeekBar.OnSeekBarChangeListener {
     private static final String TAG = AudioPlayingFragment.class.getSimpleName();
 
+    private static final String ON_SAVE_INSTANCE_STATE_MEDIA_URL = "ON_SAVE_INSTANCE_STATE_MEDIA_URL";
+    private static final String ON_SAVE_INSTANCE_STATE_IS_PLAYING = "ON_SAVE_INSTANCE_STATE_IS_PLAYING";
+    private static final String ON_SAVE_INSTANCE_STATE_TRANSCRIPTS = "ON_SAVE_INSTANCE_STATE_TRANSCRIPTS";
+    private static final String ON_SAVE_INSTANCE_STATE_POSITION = "ON_SAVE_INSTANCE_STATE_POSITION";
+
     private static final String ARGS_PODCAST = "ARGS_PODCAST";
     private static final String ARGS_TRANSITION_NAME = "ARGS_TRANSITION_NAME";
+
     private static final int PODCAST_AUDIO_LOADER_ID = 1;
     private static final int PERMISSION_REQUEST_CODE = 101;
 
@@ -85,10 +93,14 @@ public class AudioPlayingFragment extends BaseMasterFragment implements AudioPla
     @BindView(R.id.sbMedia)
     SeekBar sbMedia;
 
+    private String mMediaUrl;
+    private boolean isPlaying = true;
+    private int mCurrentPlayingPosition = -1;
+
     private AudioPlayingContract.Presenter mPresenter;
     private PodcastModel mPodcastModel;
     private TranscriptAdapter mMovieAdapter;
-    private List<TranscriptModel> mRecipes;
+    private ArrayList<TranscriptModel> mTranscripts;
     private String mTransitionName;
     private boolean isFavourite;
     private MediaPlayer mPodcastMediaPlayer;
@@ -99,8 +111,10 @@ public class AudioPlayingFragment extends BaseMasterFragment implements AudioPla
             if (mPodcastMediaPlayer != null && mPodcastMediaPlayer.isPlaying()) {
 
                 tvTimeCurrentPlaying.setText(MiscUtils.convertMillisecondToMediaTimFormat(mPodcastMediaPlayer.getCurrentPosition()));
-                int currentPlaying = mPodcastMediaPlayer.getCurrentPosition();
-                mMovieAdapter.notifyCurrentPlayingChanged(currentPlaying);
+                if (mMovieAdapter != null) {
+                    int currentPlaying = mPodcastMediaPlayer.getCurrentPosition();
+                    mMovieAdapter.notifyCurrentPlayingChanged(currentPlaying);
+                }
                 mHandler.postDelayed(mRunnable, 300);
             }
         }
@@ -135,6 +149,23 @@ public class AudioPlayingFragment extends BaseMasterFragment implements AudioPla
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mTranscripts != null)
+            outState.putParcelableArrayList(ON_SAVE_INSTANCE_STATE_TRANSCRIPTS, mTranscripts);
+        if (mMediaUrl != null && !mMediaUrl.equals(""))
+            outState.putString(ON_SAVE_INSTANCE_STATE_MEDIA_URL, mMediaUrl);
+
+        if (mPodcastMediaPlayer != null) {
+            outState.putBoolean(ON_SAVE_INSTANCE_STATE_IS_PLAYING, isPlaying);
+        }
+
+        if (mPodcastMediaPlayer != null) {
+            outState.putInt(ON_SAVE_INSTANCE_STATE_POSITION, mPodcastMediaPlayer.getCurrentPosition());
+        }
+    }
+
+    @Override
     protected String getSubclassName() {
         return TAG;
     }
@@ -146,19 +177,44 @@ public class AudioPlayingFragment extends BaseMasterFragment implements AudioPla
 
     @Override
     protected void updateFollowingViewBinding(Bundle savedInstanceState) {
-        mPresenter.doGetTranscript(mPodcastModel.getLyric_links());
-        sbMedia.setEnabled(false);
-        cpDownload.setMax(100);
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (checkPermission()) {
-                getLoaderManager().initLoader(PODCAST_AUDIO_LOADER_ID, null, this);
-            } else {
-                requestPermission();
+        if (savedInstanceState != null) {
+            if (savedInstanceState.containsKey(ON_SAVE_INSTANCE_STATE_TRANSCRIPTS)) {
+                mTranscripts = savedInstanceState.getParcelableArrayList(ON_SAVE_INSTANCE_STATE_TRANSCRIPTS);
             }
-        } else {
-            getLoaderManager().initLoader(PODCAST_AUDIO_LOADER_ID, null, this);
+
+            if (savedInstanceState.containsKey(ON_SAVE_INSTANCE_STATE_MEDIA_URL)) {
+                mMediaUrl = savedInstanceState.getString(ON_SAVE_INSTANCE_STATE_MEDIA_URL);
+            }
+            if (savedInstanceState.containsKey(ON_SAVE_INSTANCE_STATE_IS_PLAYING)) {
+                isPlaying = savedInstanceState.getBoolean(ON_SAVE_INSTANCE_STATE_IS_PLAYING);
+            }
+            if (savedInstanceState.containsKey(ON_SAVE_INSTANCE_STATE_POSITION)) {
+                mCurrentPlayingPosition = savedInstanceState.getInt(ON_SAVE_INSTANCE_STATE_POSITION);
+            }
         }
 
+        if (mTranscripts == null) {
+            mPresenter.doGetTranscript(mPodcastModel.getLyric_links());
+        } else {
+            renderTranscript(mTranscripts);
+        }
+
+        sbMedia.setEnabled(false);
+        cpDownload.setMax(100);
+
+        if (mMediaUrl == null || mMediaUrl.equals("")) {
+            if (Build.VERSION.SDK_INT >= 23) {
+                if (checkPermission()) {
+                    getLoaderManager().initLoader(PODCAST_AUDIO_LOADER_ID, null, this);
+                } else {
+                    requestPermission();
+                }
+            } else {
+                getLoaderManager().initLoader(PODCAST_AUDIO_LOADER_ID, null, this);
+            }
+        } else {
+            onLoadFinished(null, mMediaUrl);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ivBlurBackground.setTransitionName(mTransitionName);
@@ -211,8 +267,8 @@ public class AudioPlayingFragment extends BaseMasterFragment implements AudioPla
     @Override
     public void renderTranscript(List<TranscriptModel> podcasts) {
         setupRecyclerView();
-        this.mRecipes = podcasts;
-        mMovieAdapter = new TranscriptAdapter(getContext(), mRecipes,
+        this.mTranscripts = (ArrayList<TranscriptModel>) podcasts;
+        mMovieAdapter = new TranscriptAdapter(getContext(), mTranscripts,
                 this);
         mRvRecipes.setAdapter(mMovieAdapter);
     }
@@ -304,7 +360,8 @@ public class AudioPlayingFragment extends BaseMasterFragment implements AudioPla
 
     @Override
     public void onPause() {
-        mHandler.removeCallbacks(mRunnable);
+        if (mHandler != null)
+            mHandler.removeCallbacks(mRunnable);
         pauseMediaPlayer();
         super.onPause();
     }
@@ -388,6 +445,7 @@ public class AudioPlayingFragment extends BaseMasterFragment implements AudioPla
     }
 
     private void onFileDownloadSuccessfully(String uri) {
+        this.mMediaUrl = uri;
         mPodcastMediaPlayer = MediaPlayer.create(getContext(), Uri.parse(uri));
         if (mPodcastMediaPlayer != null) {
             tvTime.setText(MiscUtils.convertMillisecondToMediaTimFormat(mPodcastMediaPlayer.getDuration()));
@@ -396,18 +454,37 @@ public class AudioPlayingFragment extends BaseMasterFragment implements AudioPla
         mPodcastMediaPlayer.setOnErrorListener(this);
         sbMedia.setMax(mPodcastMediaPlayer.getDuration());
         sbMedia.setEnabled(true);
+
+        if (mPodcastMediaPlayer != null) {
+
+
+            if (mCurrentPlayingPosition > 0) {
+                mPodcastMediaPlayer.seekTo(mCurrentPlayingPosition);
+                sbMedia.setProgress(mCurrentPlayingPosition);
+                tvTimeCurrentPlaying.setText(MiscUtils.convertMillisecondToMediaTimFormat(mCurrentPlayingPosition));
+            }
+
+            if (isPlaying) {
+                mPodcastMediaPlayer.start();
+                ivPlayPause.setImageResource(R.drawable.ic_pause_black_24dp);
+                mHandler.post(mRunnable);
+            } else {
+                ivPlayPause.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+            }
+
+
+        }
         sbMedia.setOnSeekBarChangeListener(this);
-        startMediaPlayer();
     }
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-        Log.d(TAG, "completion");
+        Timber.d("onCompletion");
     }
 
     @Override
     public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
-        Log.d(TAG, "onError");
+        Timber.d("onError");
         mHandler.removeCallbacks(mRunnable);
         Toaster.showToast(getContext(), getResources().getText(R.string.download_fail).toString());
         return false;
@@ -418,8 +495,10 @@ public class AudioPlayingFragment extends BaseMasterFragment implements AudioPla
         if (mPodcastMediaPlayer != null) {
             if (mPodcastMediaPlayer.isPlaying()) {
                 pauseMediaPlayer();
+                isPlaying = false;
             } else {
                 startMediaPlayer();
+                isPlaying = true;
             }
         }
     }
