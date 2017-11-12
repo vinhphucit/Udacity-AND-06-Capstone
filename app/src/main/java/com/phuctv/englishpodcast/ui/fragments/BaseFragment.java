@@ -33,7 +33,6 @@ public abstract class BaseFragment extends Fragment {
     private static final String TAG = BaseFragment.class.getSimpleName();
 
     private Unbinder unbinder;
-    private FragmentTransaction fragmentTransaction;
     protected AlertDialog.Builder errorDialog;
     protected FirebaseAnalytics mFirebaseAnalytics;
     @Nullable
@@ -94,20 +93,6 @@ public abstract class BaseFragment extends Fragment {
             rl_progress.setVisibility(View.GONE);
     }
 
-    protected void setActionBarTitle(int i) {
-        setActionBarTitle(getResources().getString(i));
-    }
-
-    protected void setActionBarTitle(String actionBarTitle) {
-        if (getActivity() instanceof MasterActivity) {
-            ((BaseFragmentResponder) getActivity()).setActionBarTitle(actionBarTitle);
-        } else {
-            ActionBar actionbar = getActionBar();
-            if (actionbar != null) {
-                actionbar.setTitle(actionBarTitle);
-            }
-        }
-    }
 
     public void showError(String message) {
         if (TextUtils.isEmpty(message))
@@ -116,14 +101,6 @@ public abstract class BaseFragment extends Fragment {
         errorDialog.show();
     }
 
-    protected void setActionBarTitle(CharSequence actionBarTitle) {
-        if ((getActivity() instanceof MasterActivity)) {
-            ((BaseFragmentResponder) getActivity()).setActionBarTitle(actionBarTitle);
-        }
-        if (getActionBar() != null) {
-            getActionBar().setTitle(actionBarTitle);
-        }
-    }
 
     protected void showAdv(Runnable r) {
         ((BaseFragmentResponder) getActivity()).showAdv(r);
@@ -136,22 +113,13 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract void updateFollowingViewBinding(Bundle savedInstanceState);
 
-    protected ActionBar getActionBar() {
-        Activity localActivity = getActivity();
-        if ((localActivity instanceof AppCompatActivity)) {
-            return ((AppCompatActivity) localActivity).getSupportActionBar();
-        }
-        return null;
-    }
 
     public interface BaseFragmentResponder {
         void showFragment(BaseFragment fragment, String fragmentTag);
 
-        void setActionBarTitle(int i);
 
         void setActionBarTitle(String actionBarTitle);
 
-        void setActionBarTitle(CharSequence actionBarTitle);
 
         void showAdv(Runnable r);
 

@@ -330,9 +330,13 @@ public class AudioPlayingFragment extends BaseMasterFragment implements AudioPla
                             output.write(data, 0, read);
                             total += read;
                             if (fileLength > 0) // only if total length is known
-                                publishProgress((int) (total * 100 / fileLength));
+                                try {
+                                    publishProgress((int) (total * 100 / fileLength));
+                                } catch (Exception ex) {
+                                }
+
                         }
-                        return outputName;
+                        return myFile.getAbsolutePath();
 
                     } finally {
                         if (output != null)
@@ -364,11 +368,6 @@ public class AudioPlayingFragment extends BaseMasterFragment implements AudioPla
             mHandler.removeCallbacks(mRunnable);
         pauseMediaPlayer();
         super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -446,6 +445,7 @@ public class AudioPlayingFragment extends BaseMasterFragment implements AudioPla
 
     private void onFileDownloadSuccessfully(String uri) {
         this.mMediaUrl = uri;
+        Timber.d("URI FILE: " + uri);
         mPodcastMediaPlayer = MediaPlayer.create(getContext(), Uri.parse(uri));
         if (mPodcastMediaPlayer != null) {
             tvTime.setText(MiscUtils.convertMillisecondToMediaTimFormat(mPodcastMediaPlayer.getDuration()));

@@ -106,33 +106,6 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseFrag
 
     }
 
-    protected void showToast(int resourceText) {
-        showToast(getResources().getString(resourceText), Toaster.Duration.LONG);
-    }
-
-    protected void showToast(int resourceText, Toaster.Duration duration) {
-        showToast(getResources().getString(resourceText), duration);
-    }
-
-    protected void showToast(String text) {
-        showToast(text, Toaster.Duration.LONG);
-    }
-
-    protected void showToast(String text, Toaster.Duration duration) {
-        Toaster.showToast(this, text, duration);
-    }
-
-    public void setActionBarTitle(CharSequence charsequence) {
-        if (charsequence == null) {
-            Timber.w("setActionBarTitle - title is null, so defaulting to full_app_name.");
-            charsequence = getString(R.string.app_name);
-        }
-        getSupportActionBar().setTitle(charsequence);
-    }
-
-    public void setActionBarTitle(int actionBarTitle) {
-        setActionBarTitle(getResources().getString(actionBarTitle));
-    }
 
     public void setActionBarTitle(String actionBarTitle) {
         if (actionBarTitle == null) {

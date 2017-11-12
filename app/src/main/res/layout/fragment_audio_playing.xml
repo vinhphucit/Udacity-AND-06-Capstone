@@ -68,14 +68,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/tvTimeCurrentPlaying"
             android:layout_toLeftOf="@+id/tvTime"
             android:layout_toRightOf="@+id/tvTimeCurrentPlaying"
+            android:layout_toStartOf="@+id/tvTime"
             android:contentDescription="@string/media_seekbar" />
 
         <TextView
             android:id="@+id/tvTime"
             android:layout_width="56dp"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:text="@string/default_time_mediaplayer" />
@@ -95,6 +98,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/fab_margin"
         android:contentDescription="@string/action_favourite"
         app:borderWidth="0dp"
